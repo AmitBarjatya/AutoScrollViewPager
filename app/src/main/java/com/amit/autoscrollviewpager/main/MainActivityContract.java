@@ -1,5 +1,7 @@
 package com.amit.autoscrollviewpager.main;
 
+import android.support.v4.view.ViewPager;
+
 import com.amit.autoscrollviewpager.models.ImageElement;
 
 /**
@@ -19,8 +21,9 @@ public interface MainActivityContract {
         void removeAllElementFromViewPager();
         void showEmptyViewAndHideViewPager();
         void hideEmptyViewAndShowViewPager();
-        void startAutoScroll();
-        void stopAutoScroll();
+        void startViewpagerAutoScroll();
+        void stopViewpagerAutoScroll();
+        int getCurrentItemCountInViewpager();
     }
 
     interface Presenter{

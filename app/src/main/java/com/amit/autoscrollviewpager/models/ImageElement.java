@@ -8,7 +8,7 @@ public class ImageElement {
     public String imgUrl;
     public int index;
 
-    public ImageElement(String imgUrl, int index) {
+    public ImageElement(int index, String imgUrl) {
         this.imgUrl = imgUrl;
         this.index = index;
     }

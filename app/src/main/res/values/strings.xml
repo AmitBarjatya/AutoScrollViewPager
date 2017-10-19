@@ -3,4 +3,5 @@
     <string name="activity_main_add_element">Add Element</string>
     <string name="activity_main_reset_element">Reset</string>
     <string name="activity_main_remove_element">Remove Element</string>
+    <string name="activity_main_empty_view_text">Start by adding elements</string>
 </resources>
