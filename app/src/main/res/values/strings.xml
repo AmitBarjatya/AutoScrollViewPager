@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AutoscrollViewpager</string>
+    <string name="activity_main_add_element">Add Element</string>
+    <string name="activity_main_reset_element">Reset</string>
+    <string name="activity_main_remove_element">Remove Element</string>
 </resources>
