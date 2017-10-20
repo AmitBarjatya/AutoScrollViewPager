@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     /**
-     * Adds a new fragment to the viewpager
+     * Adds a new fragment to the viewpager adapter
      * @param ie the image element to get the url and index information from
      * @param addAtIndex the index at which the new element is to be added
      */
@@ -157,8 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      */
     @Override
     public void startViewpagerAutoScroll() {
-        //Stub
-        Toast.makeText(this, "Implement this", Toast.LENGTH_SHORT).show();
+        mViewpager.startAutoScroll();
     }
 
     /**
@@ -166,8 +165,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      */
     @Override
     public void stopViewpagerAutoScroll() {
-        //Stub
-        Toast.makeText(this, "Implement this", Toast.LENGTH_SHORT).show();
+        mViewpager.stopAutoScroll();
     }
 
     @Override

@@ -38,7 +38,8 @@
             android:id="@+id/activity_main_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/fabsLL"></com.amit.autoscrollviewpager.viewpager.AutoscrollViewpager>
+            android:layout_above="@+id/fabsLL"
+            android:overScrollMode="never"></com.amit.autoscrollviewpager.viewpager.AutoscrollViewpager>
 
         <LinearLayout
             android:id="@id/fabsLL"

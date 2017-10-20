@@ -72,7 +72,8 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
             if (index == 0){
                 mView.hideEmptyViewAndShowViewPager();
             }
-            mView.gotoIndexInViewpager(index);
+            if (mView.getCurrentItemCountInViewpager() > 1)
+                mView.startViewpagerAutoScroll();
         }catch (ArrayIndexOutOfBoundsException e){
             //no more elements
             //do nothing
