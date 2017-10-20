@@ -2,18 +2,16 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:wheel="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:ignore="MissingPrefix"
-    android:background="@android:color/transparent">
+    tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.design.widget.AppBarLayout>
+        android:layout_height="wrap_content"></android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,17 +20,17 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
+            android:id="@+id/activity_main_empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/activity_main_empty_view"
             android:layout_above="@+id/fabsLL">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/activity_main_empty_view_text"
-                android:textSize="24dp"
-                android:gravity="center"/>
+                android:textSize="24dp" />
 
         </RelativeLayout>
 
@@ -41,13 +39,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/fabsLL"></com.amit.autoscrollviewpager.viewpager.AutoscrollViewpager>
+
         <LinearLayout
+            android:id="@id/fabsLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:gravity="center"
-            android:id="@id/fabsLL"
-            android:layout_alignParentBottom="true">
+            android:gravity="center">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -55,21 +54,21 @@
                 android:layout_weight="1">
 
                 <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabAddElement"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/fabAddElement"
-                    app:fabSize="normal"
-                    android:tint="@android:color/white"
+                    android:layout_centerInParent="true"
                     android:src="@android:drawable/ic_input_add"
-                    android:layout_centerInParent="true"/>
+                    android:tint="@android:color/white"
+                    app:fabSize="normal" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fabAddElement"
-                    android:text="@string/activity_main_add_element"
+                    android:layout_marginTop="@dimen/activity_main_fab_to_text_margin"
                     android:gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/activity_main_fab_to_text_margin"/>
+                    android:text="@string/activity_main_add_element" />
             </RelativeLayout>
 
 
@@ -77,22 +76,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabResetElement"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/fabResetElement"
-                    app:fabSize="normal"
-                    android:tint="@android:color/white"
+                    android:layout_centerInParent="true"
                     android:src="@android:drawable/ic_popup_sync"
-                    android:layout_centerInParent="true"/>
+                    android:tint="@android:color/white"
+                    app:fabSize="normal" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fabResetElement"
-                    android:text="@string/activity_main_reset_element"
+                    android:layout_marginTop="@dimen/activity_main_fab_to_text_margin"
                     android:gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/activity_main_fab_to_text_margin"/>
+                    android:text="@string/activity_main_reset_element" />
 
             </RelativeLayout>
 
@@ -101,22 +101,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabRemoveElement"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/fabRemoveElement"
-                    app:fabSize="normal"
-                    android:tint="@android:color/white"
+                    android:layout_centerInParent="true"
                     android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    android:layout_centerInParent="true"/>
+                    android:tint="@android:color/white"
+                    app:fabSize="normal" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fabRemoveElement"
-                    android:text="@string/activity_main_remove_element"
+                    android:layout_marginTop="@dimen/activity_main_fab_to_text_margin"
                     android:gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/activity_main_fab_to_text_margin"/>
+                    android:text="@string/activity_main_remove_element" />
 
             </RelativeLayout>
 
