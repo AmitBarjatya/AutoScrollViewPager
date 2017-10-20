@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 
 /**
  * Fragment which shows the image along with its index
- *
+ * <p>
  * Created by Amit Barjatya on 10/20/17.
  */
 public class ImageElementFragment extends Fragment {
@@ -33,8 +33,8 @@ public class ImageElementFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_image_element,container,false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_image_element, container, false);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -44,6 +44,6 @@ public class ImageElementFragment extends Fragment {
         String url = getArguments().getString("url");
         int index = getArguments().getInt("index");
         Picasso.with(getContext()).load(url).into(iv);
-        tv.setText(String.format(Locale.US,"Showing Index %d",index));
+        tv.setText(String.format(Locale.US, "Showing Index %d", index));
     }
 }

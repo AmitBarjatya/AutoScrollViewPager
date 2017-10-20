@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.amit.autoscrollviewpager.R;
 import com.amit.autoscrollviewpager.models.ImageElement;
@@ -103,19 +102,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     /**
      * Adds a new fragment to the viewpager adapter
-     * @param ie the image element to get the url and index information from
+     *
+     * @param ie         the image element to get the url and index information from
      * @param addAtIndex the index at which the new element is to be added
      */
     @Override
     public void addElementToViewpager(ImageElement ie, int addAtIndex) {
         Fragment fragment = new ImageElementFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("url",ie.getImgUrl());
-        bundle.putInt("index",ie.getIndex());
+        bundle.putString("url", ie.getImgUrl());
+        bundle.putInt("index", ie.getIndex());
         fragment.setArguments(bundle);
 
-        mFragments.add(addAtIndex,fragment);
-        mFragmentTitles.add(addAtIndex,String.format(Locale.US,"Index %s",ie.getIndex()));
+        mFragments.add(addAtIndex, fragment);
+        mFragmentTitles.add(addAtIndex, String.format(Locale.US, "Index %s", ie.getIndex()));
 
         populateDummyLists();
 
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     /**
      * Removes a fragment
+     *
      * @param removeFromIndex the index from which the fragment is to be removed
      */
     @Override
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      * Dummy lists have their first element(index 0) a copy of the last element of the original list
      * and their last element(index size() -1) a copy of the first element of the original list
      */
-    private void populateDummyLists(){
+    private void populateDummyLists() {
         mDummyFragments.clear();
         mDummyFragmentTitles.clear();
 
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mDummyFragmentTitles.addAll(mFragmentTitles);
 
         //only add dummy elements when the size is greater than 1
-        if (mFragmentTitles.size()>1) {
+        if (mFragmentTitles.size() > 1) {
             Fragment first = new ImageElementFragment();
             first.setArguments(mFragments.get(mFragments.size() - 1).getArguments());
 
@@ -219,6 +220,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     public void gotoIndexInViewpager(int index) {
-        mViewpager.setCurrentItem(index,true);
+        mViewpager.setCurrentItem(index, true);
     }
 }

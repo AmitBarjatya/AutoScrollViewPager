@@ -47,7 +47,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
 
     /**
      * Notify this presenter that the view is about to go out of focus
-     *
+     * <p>
      * ask viewpager to stop auto scroll
      */
     @Override
@@ -68,13 +68,13 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
         try {
             ImageElement element = mRepository.getElement(currIndex);
             int index = mView.getRealItemCountInViewpager();
-            mView.addElementToViewpager(element,index);
-            if (index == 0){
+            mView.addElementToViewpager(element, index);
+            if (index == 0) {
                 mView.hideEmptyViewAndShowViewPager();
             }
             if (mView.getRealItemCountInViewpager() > 1)
                 mView.startAutoScrollAndLoop();
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             //no more elements
             //do nothing
         }
@@ -101,9 +101,9 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     @Override
     public void onRemoveElementFabClicked() {
         int itemsInViewpager = mView.getRealItemCountInViewpager();
-        if (itemsInViewpager != 0){
+        if (itemsInViewpager != 0) {
             mView.removeElementFromViewPager(itemsInViewpager - 1);
-            if (itemsInViewpager == 1){
+            if (itemsInViewpager == 1) {
                 mView.showEmptyViewAndHideViewPager();
             }
         }
