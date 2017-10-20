@@ -24,11 +24,11 @@ public interface MainActivityContract {
 
         void hideEmptyViewAndShowViewPager();
 
-        void startViewpagerAutoScroll();
+        void startAutoScrollAndLoop();
 
-        void stopViewpagerAutoScroll();
+        void stopAutoScrollAndLoop();
 
-        int getCurrentItemCountInViewpager();
+        int getRealItemCountInViewpager();
 
         void gotoIndexInViewpager(int index);
     }

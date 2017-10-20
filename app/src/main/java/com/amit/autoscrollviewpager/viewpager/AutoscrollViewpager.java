@@ -21,6 +21,7 @@ public class AutoscrollViewpager extends ViewPager {
     private static final long SCROLL_INTERVAL_MILLIS = 4*1000;
 
     private Handler autoScrollHandler;
+    private OnPageChangeListener pageChangeListener = new PageChangeListenerForLooping(this);
 
     public AutoscrollViewpager(Context context) {
         super(context);
@@ -39,14 +40,13 @@ public class AutoscrollViewpager extends ViewPager {
     public void startAutoScroll(){
         if (autoScrollHandler == null) {
             autoScrollHandler = new Handler();
-            Log.d("TAG", "start auto scroll");
+            setCurrentItem(1);
+            Log.d(TAG, "start auto scroll");
             autoScrollHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     int currVisiblePosition = getCurrentItem();
-                    int numItemsInAdapter = getAdapter().getCount();
-                    int nextVisiblePosition =
-                            currVisiblePosition == numItemsInAdapter - 1 ? 0 : currVisiblePosition + 1;
+                    int nextVisiblePosition = currVisiblePosition+1;
                     setCurrentItem(nextVisiblePosition, true);
                     autoScrollHandler.postDelayed(this, SCROLL_INTERVAL_MILLIS);
                 }
@@ -63,6 +63,47 @@ public class AutoscrollViewpager extends ViewPager {
         if (autoScrollHandler!=null){
             autoScrollHandler.removeCallbacksAndMessages(null);
             autoScrollHandler = null;
+        }
+    }
+
+    public OnPageChangeListener getPageChangeListener() {
+        return pageChangeListener;
+    }
+
+    /**
+     * An implementation of OnPageChangeListener which helps in looping the dataset
+     * i.e. a leftswipe on last element will get you to first element
+     * or a rightswipe on first element will get you to last element
+     */
+    private class PageChangeListenerForLooping implements ViewPager.OnPageChangeListener{
+        int mCurrentPosition = 1;
+        ViewPager vp;
+
+        PageChangeListenerForLooping(ViewPager vp) {
+            this.vp = vp;
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            mCurrentPosition = position;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (state == 0) {
+                int totalItemsInViewpagerAdapter = vp.getAdapter().getCount();
+                if (mCurrentPosition == 0) {
+                    vp.setCurrentItem(totalItemsInViewpagerAdapter - 2, false);
+                }
+                if (mCurrentPosition == totalItemsInViewpagerAdapter - 1) {
+                    vp.setCurrentItem(1, false);
+                }
+            }
         }
     }
 
