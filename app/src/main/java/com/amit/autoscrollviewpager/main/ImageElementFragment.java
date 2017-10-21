@@ -43,7 +43,11 @@ public class ImageElementFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         String url = getArguments().getString("url");
         int index = getArguments().getInt("index");
-        Picasso.with(getContext()).load(url).into(iv);
+        Picasso.with(getContext())
+                .load(url)
+                .fit()
+                .centerCrop()
+                .into(iv);
         tv.setText(String.format(Locale.US, "Showing Index %d", index));
     }
 }
