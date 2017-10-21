@@ -2,9 +2,15 @@ package com.amit.autoscrollviewpager.viewpager;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
+
+import java.lang.ref.WeakReference;
 
 /**
  * A viewpager implementation which auto scrolls it's contents
@@ -18,40 +24,33 @@ public class AutoscrollViewpager extends ViewPager {
     private static final String TAG = "AutoscrollViewpager";
     private static final long SCROLL_INTERVAL_MILLIS = 4 * 1000;
 
+    private static final int SCROLL=0;
+    float downX = 0;
+
+    //user has to drag 20 pixels before we consider it as a scroll event
+    private static final float SCROLL_THRESHOLD = 50f;
+
     private Handler autoScrollHandler;
-    private OnPageChangeListener pageChangeListener = new PageChangeListenerForLooping(this);
 
     public AutoscrollViewpager(Context context) {
         super(context);
+        initialize();
     }
 
     public AutoscrollViewpager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initialize();
+    }
+
+    private void initialize(){
+        autoScrollHandler = new AutoscrollHandler(this);
     }
 
     /**
      * Make this viewpager scroll to the right after every SCROLL_INTERVAL_MILLIS milliseconds
-     * <p>
-     * if the current visible position is the last element then set next item as 0th item
-     * else set next item as current visible index + 1
      */
     public void startAutoScroll() {
-        if (autoScrollHandler == null) {
-            autoScrollHandler = new Handler();
-            setCurrentItem(1);
-            Log.d(TAG, "start auto scroll");
-            autoScrollHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    int currVisiblePosition = getCurrentItem();
-                    int nextVisiblePosition = currVisiblePosition + 1;
-                    setCurrentItem(nextVisiblePosition, true);
-                    autoScrollHandler.postDelayed(this, SCROLL_INTERVAL_MILLIS);
-                }
-            }, SCROLL_INTERVAL_MILLIS);
-        } else {
-            Log.d(TAG, "already scrolling");
-        }
+        sendScrollMessage();
     }
 
     /**
@@ -59,48 +58,102 @@ public class AutoscrollViewpager extends ViewPager {
      */
     public void stopAutoScroll() {
         if (autoScrollHandler != null) {
-            autoScrollHandler.removeCallbacksAndMessages(null);
-            autoScrollHandler = null;
+            autoScrollHandler.removeCallbacksAndMessages(SCROLL);
         }
-    }
-
-    public OnPageChangeListener getPageChangeListener() {
-        return pageChangeListener;
     }
 
     /**
-     * An implementation of OnPageChangeListener which helps in looping the dataset
-     * i.e. a leftswipe on last element will get you to first element
-     * or a rightswipe on first element will get you to last element
+     * Send a scroll message to handler
+     * Also make sure that there's only one scroll message present in the message queue
      */
-    private class PageChangeListenerForLooping implements ViewPager.OnPageChangeListener {
-        int mCurrentPosition = 1;
-        ViewPager vp;
+    private void sendScrollMessage(){
+        autoScrollHandler.removeMessages(SCROLL);
+        Message msg = autoScrollHandler.obtainMessage();
+        autoScrollHandler.sendMessageDelayed(msg,SCROLL_INTERVAL_MILLIS);
+    }
 
-        PageChangeListenerForLooping(ViewPager vp) {
-            this.vp = vp;
+    /**
+     * Scroll this viewpager by one page to the right
+     */
+    private void scrollOnce(){
+        PagerAdapter mAdapter = getAdapter();
+        if (mAdapter == null || mAdapter.getCount() <= 1){
+            return;
+        }
+
+        int items = mAdapter.getCount();
+        int currentItemIndex = getCurrentItem();
+        int nextItemIndex = currentItemIndex+1;
+        if (nextItemIndex == items ){
+            setCurrentItem(0,true);
+        }else {
+            setCurrentItem(nextItemIndex,true);
+        }
+    }
+
+    /**
+     * Intercept touch events to provide scroll on last page
+     * Stop auto scroll on touch
+     * else start auto scroll
+     *
+     * if we are scrolling right on first page
+     *      goto the last page
+     * if we are scrolling left on last page
+     *      goto the first page
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        int action = MotionEventCompat.getActionMasked(ev);
+        if (action == MotionEvent.ACTION_DOWN){
+            stopAutoScroll();
+        }else if (action == MotionEvent.ACTION_UP){
+            startAutoScroll();
+        }
+
+        PagerAdapter mAdapter = getAdapter();
+        int currentItemIndex = getCurrentItem();
+        int items = mAdapter == null ? 0:mAdapter.getCount();
+        float touchX = ev.getX();
+        if (action == MotionEvent.ACTION_DOWN){
+            downX = ev.getX();
+        }
+
+        if ((currentItemIndex == 0 && touchX > downX + SCROLL_THRESHOLD)
+                || (currentItemIndex == items- 1 && touchX + SCROLL_THRESHOLD < downX)){
+            if (items>1){
+                setCurrentItem(items-currentItemIndex-1,true);
+            }
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+
+    /**
+     * Handler for sending scroll messages every SCROLL_INTERVAL milliseconds
+     */
+    private static class AutoscrollHandler extends Handler {
+        WeakReference<AutoscrollViewpager> wrViewPager;
+
+        AutoscrollHandler(AutoscrollViewpager viewPager) {
+            this.wrViewPager = new WeakReference<AutoscrollViewpager>(viewPager);
         }
 
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
 
-        }
-
-        @Override
-        public void onPageSelected(int position) {
-            mCurrentPosition = position;
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            if (state == 0) {
-                int totalItemsInViewpagerAdapter = vp.getAdapter().getCount();
-                if (mCurrentPosition == 0) {
-                    vp.setCurrentItem(totalItemsInViewpagerAdapter - 2, false);
-                }
-                if (mCurrentPosition == totalItemsInViewpagerAdapter - 1) {
-                    vp.setCurrentItem(1, false);
-                }
+            switch (msg.what){
+                case SCROLL:
+                    AutoscrollViewpager autoscrollViewpager = wrViewPager.get();
+                    if (autoscrollViewpager!=null){
+                        autoscrollViewpager.scrollOnce();
+                        autoscrollViewpager.sendScrollMessage();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
