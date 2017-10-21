@@ -9,10 +9,6 @@
     android:orientation="vertical"
     tools:ignore="MissingPrefix">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.design.widget.AppBarLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,7 +38,7 @@
             android:overScrollMode="never"></com.amit.autoscrollviewpager.viewpager.AutoscrollViewpager>
 
         <LinearLayout
-            android:id="@id/fabsLL"
+            android:id="@+id/fabsLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
