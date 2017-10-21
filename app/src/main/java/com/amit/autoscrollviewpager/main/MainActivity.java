@@ -43,12 +43,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     ArrayList<String> mFragmentTitles = new ArrayList<>();
 
     /**
-     * These dummy lists are used for an circular view pager behaviour
-     */
-    ArrayList<Fragment> mDummyFragments = new ArrayList<>();
-    ArrayList<String> mDummyFragmentTitles = new ArrayList<>();
-
-    /**
      * Pass the click event on Add Element Fab to presenter
      */
     @OnClick(R.id.fabAddElement)
@@ -96,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
      * Initialize viewpager with a new PagerAdapter
      */
     private void initViewpager() {
-        mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mDummyFragments, mDummyFragmentTitles);
+        mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragments, mFragmentTitles);
         mViewpager.setAdapter(mAdapter);
     }
 
@@ -117,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mFragments.add(addAtIndex, fragment);
         mFragmentTitles.add(addAtIndex, String.format(Locale.US, "Index %s", ie.getIndex()));
 
-        populateDummyLists();
-
         mAdapter.notifyDataSetChanged();
     }
 
@@ -132,38 +124,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         mFragments.remove(removeFromIndex);
         mFragmentTitles.remove(removeFromIndex);
 
-        populateDummyLists();
 
         mAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Populates the dummy lists for looping behaviour
-     * Dummy lists have their first element(index 0) a copy of the last element of the original list
-     * and their last element(index size() -1) a copy of the first element of the original list
-     */
-    private void populateDummyLists() {
-        mDummyFragments.clear();
-        mDummyFragmentTitles.clear();
-
-        mDummyFragments.addAll(mFragments);
-        mDummyFragmentTitles.addAll(mFragmentTitles);
-
-        //only add dummy elements when the size is greater than 1
-        if (mFragmentTitles.size() > 1) {
-            Fragment first = new ImageElementFragment();
-            first.setArguments(mFragments.get(mFragments.size() - 1).getArguments());
-
-            Fragment last = new ImageElementFragment();
-            last.setArguments(mFragments.get(0).getArguments());
-
-            mDummyFragments.add(0, first);
-            mDummyFragmentTitles.add(0, mFragmentTitles.get(mFragmentTitles.size() - 1));
-
-            mDummyFragments.add(last);
-            mDummyFragmentTitles.add(mFragmentTitles.get(0));
-        }
-    }
 
     /**
      * Removes all the elements from viewpager
@@ -172,8 +136,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void removeAllElementFromViewPager() {
         mFragments.clear();
         mFragmentTitles.clear();
-        mDummyFragments.clear();
-        mDummyFragmentTitles.clear();
         mAdapter.notifyDataSetChanged();
     }
 
@@ -201,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void startAutoScrollAndLoop() {
         mViewpager.startAutoScroll();
-        mViewpager.addOnPageChangeListener(mViewpager.getPageChangeListener());
     }
 
     /**
@@ -210,12 +171,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @Override
     public void stopAutoScrollAndLoop() {
         mViewpager.stopAutoScroll();
-        mViewpager.removeOnPageChangeListener(mViewpager.getPageChangeListener());
     }
 
     @Override
-    public int getRealItemCountInViewpager() {
-        return mFragments.size();
+    public int getItemCountInViewpager() {
+        return mViewpager.getAdapter().getCount();
     }
 
     @Override
