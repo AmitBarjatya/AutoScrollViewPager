@@ -28,7 +28,7 @@ public interface MainActivityContract {
 
         void stopAutoScrollAndLoop();
 
-        int getItemCountInViewpager();
+        int getRealItemCountInViewpager();
 
         void gotoIndexInViewpager(int index);
     }

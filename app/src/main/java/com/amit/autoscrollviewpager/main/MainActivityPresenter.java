@@ -39,7 +39,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
         } else {
             mView.hideEmptyViewAndShowViewPager();
         }
-        int itemsShowingCurrently = mView.getItemCountInViewpager();
+        int itemsShowingCurrently = mView.getRealItemCountInViewpager();
         if (itemsShowingCurrently > 1) {
             mView.startAutoScrollAndLoop();
         }
@@ -67,12 +67,12 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
         currIndex++;
         try {
             ImageElement element = mRepository.getElement(currIndex);
-            int index = mView.getItemCountInViewpager();
+            int index = mView.getRealItemCountInViewpager();
             mView.addElementToViewpager(element, index);
             if (index == 0) {
                 mView.hideEmptyViewAndShowViewPager();
             }
-            if (mView.getItemCountInViewpager() > 1)
+            if (mView.getRealItemCountInViewpager() > 1)
                 mView.startAutoScrollAndLoop();
         } catch (ArrayIndexOutOfBoundsException e) {
             //no more elements
@@ -100,7 +100,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
      */
     @Override
     public void onRemoveElementFabClicked() {
-        int itemsInViewpager = mView.getItemCountInViewpager();
+        int itemsInViewpager = mView.getRealItemCountInViewpager();
         if (itemsInViewpager != 0) {
             mView.removeElementFromViewPager(itemsInViewpager - 1);
             if (itemsInViewpager == 1) {
